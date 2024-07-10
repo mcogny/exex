@@ -2,6 +2,7 @@ let moves = 0;
 let startTime = Date.now();
 let towers = [[], [], []];
 let numDisks = 4;
+let selectedTower = null;
 
 function initializeGame() {
     for (let i = numDisks; i > 0; i--) {
@@ -24,13 +25,26 @@ function renderTowers() {
     }
 }
 
+function selectTower(towerIndex) {
+    if (selectedTower === null) {
+        selectedTower = towerIndex;
+    } else {
+        moveDisk(selectedTower, towerIndex);
+        selectedTower = null;
+    }
+}
+
 function moveDisk(from, to) {
     if (towers[from].length === 0) return;
     const disk = towers[from].pop();
-    towers[to].push(disk);
-    moves++;
-    document.getElementById('moves').innerText = `Moves: ${moves}`;
-    renderTowers();
+    if (towers[to].length === 0 || towers[to][towers[to].length - 1] > disk) {
+        towers[to].push(disk);
+        moves++;
+        document.getElementById('moves').innerText = `Moves: ${moves}`;
+        renderTowers();
+    } else {
+        towers[from].push(disk); // Move back if invalid
+    }
 }
 
 function saveResult() {
@@ -51,12 +65,4 @@ function saveResult() {
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeGame();
-    document.querySelectorAll('.tower').forEach((tower, index) => {
-        tower.addEventListener('click', () => {
-            const selectedTower = towers.findIndex(t => t.includes(parseInt(tower.innerText)));
-            if (selectedTower !== -1) {
-                moveDisk(selectedTower, index);
-            }
-        });
-    });
 });
