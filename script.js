@@ -1,6 +1,7 @@
 const towers = document.querySelectorAll('.tower');
 const moveCount = document.getElementById('move-count');
 const timeDisplay = document.getElementById('time');
+const startBtn = document.getElementById('start-btn');
 const resetBtn = document.getElementById('reset-btn');
 
 let disks = [];
@@ -8,6 +9,7 @@ let moves = 0;
 let startTime;
 let timerInterval;
 let selectedDisk = null;
+let gameStarted = false;
 
 function initGame() {
     disks = [4, 3, 2, 1];
@@ -16,6 +18,9 @@ function initGame() {
     clearInterval(timerInterval);
     timeDisplay.textContent = '00:00';
     renderDisks();
+    gameStarted = true;
+    startBtn.style.display = 'none';
+    resetBtn.style.display = 'inline-block';
     startTimer();
 }
 
@@ -44,6 +49,7 @@ function updateTimer() {
 }
 
 function selectDisk(event) {
+    if (!gameStarted) return;
     const clickedTower = event.currentTarget;
     const topDisk = clickedTower.lastElementChild;
 
@@ -73,11 +79,14 @@ function moveDisk(targetTower) {
 function checkWin() {
     if (towers[2].childElementCount === 4) {
         clearInterval(timerInterval);
+        gameStarted = false;
         alert(`Congratulations! You solved the puzzle in ${moves} moves and ${timeDisplay.textContent}!`);
     }
 }
 
 towers.forEach(tower => tower.addEventListener('click', selectDisk));
+startBtn.addEventListener('click', initGame);
 resetBtn.addEventListener('click', initGame);
 
-initGame();
+// 초기 상태 설정
+renderDisks();
