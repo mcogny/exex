@@ -1,0 +1,17 @@
+word,colour,congruent,corrAns
+RED,red,1,left
+RED,green,0,down
+RED,yellow,0,up
+RED,blue,0,right
+BLUE,green,0,down
+BLUE,red,0,left
+BLUE,blue,1,right
+BLUE,yellow,0,up
+YELLOW,yellow,1,up
+YELLOW,green,0,down
+YELLOW,red,0,left
+YELLOW,blue,0,right
+GREEN,yellow,0,up
+GREEN,blue,0,right
+GREEN,green,1,down
+GREEN,red,0,left
