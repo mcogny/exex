@@ -1,51 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tower of Hanoi Experiment</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>Tower of Hanoi Experiment</h1>
-    <div id="participant-form">
-        <label for="participant-id">Participant ID:</label>
-        <input type="text" id="participant-id" required>
-        <button id="start-btn">Start Experiment</button>
-    </div>
-    <div id="game-container" style="display:none;">
-        <div id="instructions">
-            <h2>Instructions:</h2>
-            <p>1. Click on a disk to select it.</p>
-            <p>2. Click on another tower to move the selected disk.</p>
-            <p>3. Move all disks to the rightmost tower to complete the experiment.</p>
-        </div>
-        <div id="towers">
-            <div class="tower" id="tower1"></div>
-            <div class="tower" id="tower2"></div>
-            <div class="tower" id="tower3"></div>
-        </div>
-        <div id="info">
-            <p>Moves: <span id="move-count">0</span></p>
-            <p>Time: <span id="time">00:00</span></p>
-        </div>
-        <button id="reset-btn">Reset Game</button>
-    </div>
-    <div id="data-container" style="display:none;">
-        <h2>Experiment Data</h2>
-        <table id="data-table">
-            <thead>
-                <tr>
-                    <th>Participant ID</th>
-                    <th>Moves</th>
-                    <th>Time (seconds)</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <button id="download-btn">Download Data (CSV)</button>
-    </div>
-    <script src="script.js"></script>
-</body>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>untitled [PsychoPy]</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="./lib/psychojs-2024.1.5.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- external libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/preloadjs@1.0.1/lib/preloadjs.min.js"></script>
+    <!-- experiment -->
+    <script src="./untitled.js" type="module"></script>
+    <!-- legacy browsers -->
+    <script src="./lib/psychojs-2024.1.5.iife.js" nomodule></script>
+    <script src="./untitled-legacy-browsers.js" nomodule></script>
+  </body>
 </html>
