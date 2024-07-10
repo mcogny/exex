@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hanoi Tower Experiment</title>
+    <link rel="stylesheet" href="static/style.css">
     <script src="static/script.js" defer></script>
 </head>
 <body>
     <h1>Hanoi Tower Experiment</h1>
+    <div id="game">
+        <div class="tower" id="tower1"></div>
+        <div class="tower" id="tower2"></div>
+        <div class="tower" id="tower3"></div>
+    </div>
     <p id="moves">Moves: 0</p>
-    <button onclick="incrementMoves()">Move Disk</button>
     <button onclick="saveResult()">Save Result</button>
 </body>
 </html>
