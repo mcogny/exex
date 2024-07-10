@@ -1,15 +1,38 @@
+const participantForm = document.getElementById('participant-form');
+const gameContainer = document.getElementById('game-container');
+const dataContainer = document.getElementById('data-container');
+const participantIdInput = document.getElementById('participant-id');
+const startBtn = document.getElementById('start-btn');
+const resetBtn = document.getElementById('reset-btn');
+const downloadBtn = document.getElementById('download-btn');
 const towers = document.querySelectorAll('.tower');
 const moveCount = document.getElementById('move-count');
 const timeDisplay = document.getElementById('time');
-const startBtn = document.getElementById('start-btn');
-const resetBtn = document.getElementById('reset-btn');
+const dataTable = document.getElementById('data-table').getElementsByTagName('tbody')[0];
 
+let participantId;
 let disks = [];
 let moves = 0;
 let startTime;
 let timerInterval;
 let selectedDisk = null;
 let gameStarted = false;
+
+startBtn.addEventListener('click', startExperiment);
+resetBtn.addEventListener('click', resetGame);
+downloadBtn.addEventListener('click', downloadData);
+towers.forEach(tower => tower.addEventListener('click', selectDisk));
+
+function startExperiment() {
+    participantId = participantIdInput.value.trim();
+    if (participantId) {
+        participantForm.style.display = 'none';
+        gameContainer.style.display = 'block';
+        initGame();
+    } else {
+        alert('Please enter a Participant ID');
+    }
+}
 
 function initGame() {
     disks = [4, 3, 2, 1];
@@ -19,8 +42,6 @@ function initGame() {
     timeDisplay.textContent = '00:00';
     renderDisks();
     gameStarted = true;
-    startBtn.style.display = 'none';
-    resetBtn.style.display = 'inline-block';
     startTimer();
 }
 
@@ -80,13 +101,42 @@ function checkWin() {
     if (towers[2].childElementCount === 4) {
         clearInterval(timerInterval);
         gameStarted = false;
+        const time = Math.floor((Date.now() - startTime) / 1000);
         alert(`Congratulations! You solved the puzzle in ${moves} moves and ${timeDisplay.textContent}!`);
+        saveData(participantId, moves, time);
+        showData();
     }
 }
 
-towers.forEach(tower => tower.addEventListener('click', selectDisk));
-startBtn.addEventListener('click', initGame);
-resetBtn.addEventListener('click', initGame);
+function resetGame() {
+    initGame();
+}
 
-// 초기 상태 설정
-renderDisks();
+function saveData(id, moves, time) {
+    const data = JSON.parse(localStorage.getItem('experimentData')) || [];
+    data.push({
+        id: id,
+        moves: moves,
+        time: time,
+        date: new Date().toISOString()
+    });
+    localStorage.setItem('experimentData', JSON.stringify(data));
+}
+
+function showData() {
+    const data = JSON.parse(localStorage.getItem('experimentData')) || [];
+    dataTable.innerHTML = '';
+    data.forEach(item => {
+        const row = dataTable.insertRow();
+        row.insertCell(0).textContent = item.id;
+        row.insertCell(1).textContent = item.moves;
+        row.insertCell(2).textContent = item.time;
+        row.insertCell(3).textContent = new Date(item.date).toLocaleString();
+    });
+    dataContainer.style.display = 'block';
+}
+
+function downloadData() {
+    const data = JSON.parse(localStorage.getItem('experimentData')) || [];
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Participant ID```
