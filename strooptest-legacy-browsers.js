@@ -41,12 +41,9 @@ flowScheduler.add(experimentInit);
 flowScheduler.add(instructionsRoutineBegin());
 flowScheduler.add(instructionsRoutineEachFrame());
 flowScheduler.add(instructionsRoutineEnd());
-const trialsLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBegin(trialsLoopScheduler));
-flowScheduler.add(trialsLoopScheduler);
-flowScheduler.add(trialsLoopEnd);
-
-
+flowScheduler.add(trialRoutineBegin());
+flowScheduler.add(trialRoutineEachFrame());
+flowScheduler.add(trialRoutineEnd());
 flowScheduler.add(quitPsychoJS, '', true);
 
 // quit if user presses Cancel in dialog box:
@@ -319,70 +316,6 @@ function instructionsRoutineEnd(snapshot) {
 }
 
 
-var trials;
-function trialsLoopBegin(trialsLoopScheduler, snapshot) {
-  return async function() {
-    TrialHandler.fromSnapshot(snapshot); // update internal variables (.thisN etc) of the loop
-    
-    // set up handler to look after randomisation of conditions etc
-    trials = new TrialHandler({
-      psychoJS: psychoJS,
-      nReps: 2, method: TrialHandler.Method.RANDOM,
-      extraInfo: expInfo, originPath: undefined,
-      trialList: 'conditions.xlsx',
-      seed: undefined, name: 'trials'
-    });
-    psychoJS.experiment.addLoop(trials); // add the loop to the experiment
-    currentLoop = trials;  // we're now the current loop
-    
-    // Schedule all the trials in the trialList:
-    trials.forEach(function() {
-      snapshot = trials.getSnapshot();
-    
-      trialsLoopScheduler.add(importConditions(snapshot));
-      trialsLoopScheduler.add(trialRoutineBegin(snapshot));
-      trialsLoopScheduler.add(trialRoutineEachFrame());
-      trialsLoopScheduler.add(trialRoutineEnd(snapshot));
-      trialsLoopScheduler.add(trialsLoopEndIteration(trialsLoopScheduler, snapshot));
-    });
-    
-    return Scheduler.Event.NEXT;
-  }
-}
-
-
-async function trialsLoopEnd() {
-  // terminate loop
-  psychoJS.experiment.removeLoop(trials);
-  // update the current loop from the ExperimentHandler
-  if (psychoJS.experiment._unfinishedLoops.length>0)
-    currentLoop = psychoJS.experiment._unfinishedLoops.at(-1);
-  else
-    currentLoop = psychoJS.experiment;  // so we use addData from the experiment
-  return Scheduler.Event.NEXT;
-}
-
-
-function trialsLoopEndIteration(scheduler, snapshot) {
-  // ------Prepare for next entry------
-  return async function () {
-    if (typeof snapshot !== 'undefined') {
-      // ------Check if user ended loop early------
-      if (snapshot.finished) {
-        // Check for and save orphaned data
-        if (psychoJS.experiment.isEntryEmpty()) {
-          psychoJS.experiment.nextEntry(snapshot);
-        }
-        scheduler.stop();
-      } else {
-        psychoJS.experiment.nextEntry(snapshot);
-      }
-    return Scheduler.Event.NEXT;
-    }
-  };
-}
-
-
 var _response_allKeys;
 var trialComponents;
 function trialRoutineBegin(snapshot) {
@@ -397,8 +330,8 @@ function trialRoutineBegin(snapshot) {
     routineTimer.add(2.200000);
     // update component parameters for each repeat
     psychoJS.experiment.addData('trial.started', globalClock.getTime());
-    target.setColor(new util.Color(colour));
-    target.setText(word);
+    target.setColor(new util.Color('red'));
+    target.setText('RED');
     response.keys = undefined;
     response.rt = undefined;
     _response_allKeys = [];
@@ -465,7 +398,7 @@ function trialRoutineEachFrame() {
         response.rt = _response_allKeys[_response_allKeys.length - 1].rt;
         response.duration = _response_allKeys[_response_allKeys.length - 1].duration;
         // was this correct?
-        if (response.keys == corrAns) {
+        if (response.keys == 'left') {
             response.corr = 1;
         } else {
             response.corr = 0;
@@ -513,7 +446,7 @@ function trialRoutineEnd(snapshot) {
     psychoJS.experiment.addData('trial.stopped', globalClock.getTime());
     // was no response the correct answer?!
     if (response.keys === undefined) {
-      if (['None','none',undefined].includes(corrAns)) {
+      if (['None','none',undefined].includes('left')) {
          response.corr = 1;  // correct non-response
       } else {
          response.corr = 0;  // failed to respond (incorrectly)
