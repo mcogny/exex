@@ -15,10 +15,11 @@ function renderTowers() {
     for (let i = 0; i < 3; i++) {
         const tower = document.getElementById(`tower${i + 1}`);
         tower.innerHTML = '';
-        towers[i].forEach(disk => {
+        towers[i].forEach((disk, index) => {
             const diskElement = document.createElement('div');
             diskElement.className = 'disk';
             diskElement.style.width = `${disk * 20}px`;
+            diskElement.style.bottom = `${index * 20}px`;
             diskElement.innerText = disk;
             tower.appendChild(diskElement);
         });
