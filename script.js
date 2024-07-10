@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     towers.forEach(tower => tower.addEventListener('click', selectDisk));
 
     function startExperiment() {
+        console.log('startExperiment 함수 호출됨');
         participantId = participantIdInput.value.trim();
         if (participantId) {
             participantForm.style.display = 'none';
@@ -139,4 +140,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function downloadData() {
         const data = JSON.parse(localStorage.getItem('experimentData')) || [];
-        let csvContent = "data:text/csv;charset=utf-8```
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Participant ID,Moves,Time (seconds),Date\n";
+        data.forEach(item => {
+            csvContent += `${item.id},${item.moves},${item.time},${new Date(item.date).toLocaleString()}\n`;
+        });
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "experiment_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+});
