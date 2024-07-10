@@ -1,17 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hanoi Tower Experiment</title>
-    <link rel="stylesheet" href="static/style.css">
-</head>
-<body>
-    <h1>Welcome to the Hanoi Tower Experiment</h1>
-    <form action="experiment.html" method="get">
-        <label for="participant_id">Enter your participant ID:</label>
-        <input type="text" id="participant_id" name="participant_id" required>
-        <button type="submit">Start Experiment</button>
-    </form>
-</body>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no">
+    <title>tower [PsychoPy]</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="./lib/psychojs-2021.2.3.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- external libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/preloadjs@1.0.1/lib/preloadjs.min.js"></script>
+    <!-- experiment -->
+    <script src="./tower.js" type="module"></script>
+    <!-- legacy browsers -->
+    <script src="./lib/psychojs-2021.2.3.iife.js" nomodule></script>
+    <script src="./tower-legacy-browsers.js" nomodule></script>
+  </body>
 </html>
